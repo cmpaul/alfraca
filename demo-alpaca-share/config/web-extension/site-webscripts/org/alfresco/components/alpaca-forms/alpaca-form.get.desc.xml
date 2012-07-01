@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Alpaca Form Component</shortname>
+  <description>Component that renders a form using Alpaca forms</description>
+  <url>/components/alpaca-form</url>
+</webscript>

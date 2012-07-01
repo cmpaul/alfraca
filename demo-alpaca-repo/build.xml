@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="demo-alpaca-repo" default="deploy" basedir=".">
+	<property file="build.properties" />
+
+	<property name="project.dir" value="." />
+	<property name="build.dir" value="${project.dir}/build" />
+	<property name="bin.dir" value="${project.dir}/bin" />
+	<property name="project.name" value="demo-alfresco-repo" />
+	<property name="package.file.zip" value="${build.dir}/${project.name}.zip" />
+	<property name="package.file.jar" value="${build.dir}/${project.name}.jar" />
+	<property name="project.file.zip" value="${build.dir}/${project.name}-project.zip" />
+    <property name="package.file.amp" value="${build.dir}/${project.name}.amp" />
+    <property name="module.id" value="com.tribloom.demo.module.repository" />
+    <property name="module.dir" value="/module" />
+	<property name="source.dir" value="${project.dir}/src" />
+	<property name="config.dir" value="${project.dir}/config" />
+	<property name="data.dir" value="${project.dir}/data" />
+	<property name="web.dir" value="${source.dir}/web" />
+	<property name="extension.dir" value="/alfresco/extension" />
+
+	<path id="classpath">
+		<fileset dir="${alfresco.sdk.remote.dir}" includes="**/*.jar" />
+		<fileset dir="${alfresco.sdk.server.dir}" includes="**/*.jar" />
+	</path>
+
+	<target name="clean" description="Removes all generated files">
+		<delete dir="${build.dir}" />
+		<delete dir="${bin.dir}" />		
+	</target>
+
+	<target name="clean-tomcat" description="Removes deployed extension directory" >
+		<delete dir="${alfresco.web.dir}/WEB-INF/classes/alfresco/extension" />
+		<delete dir="${alfresco.web.dir}/WEB-INF/classes/alfresco/module" />
+		<delete dir="${alfresco.web.dir}/jsp/extension" />
+	</target>
+
+	<target name="setup" description="Creates the ${build.dir} and ${bin.dir} directories">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${bin.dir}" />		
+	</target>
+
+	<target name="package-extension" depends="setup, package-jar" description="Creates a zip called ${package.file.zip} which can be unzipped on top of an exploded Alfresco web app">
+		<delete file="${package.file.zip}" />
+		<zip destfile="${package.file.zip}" update="true">
+			<zipfileset dir="${config.dir}${extension.dir}" prefix="WEB-INF/classes${extension.dir}" />
+			<zipfileset file="${package.file.jar}" prefix="WEB-INF/lib" />
+			<zipfileset dir="${web.dir}" excludes="META-INF/**" />
+		</zip>
+	</target>
+	
+	<target name="package-amp" depends="setup, package-jar" description="Packages the customizations as an Alfresco module in ${package.file.amp}">
+		<delete file="${package.file.amp}" />
+		<zip destfile="${package.file.amp}">
+			<zipfileset file="${package.file.jar}" prefix="lib" />
+			<zipfileset dir="${web.dir}" prefix="web" />
+			<zipfileset file="${config.dir}${module.dir}/${module.id}/module.properties" />						
+			<zipfileset file="${config.dir}${module.dir}/${module.id}/file-mapping.properties" />
+			<zipfileset file="${config.dir}${module.dir}/${module.id}/module-context.xml" prefix="config${module.dir}/${module.id}" />
+			<zipfileset file="${config.dir}/**" prefix="config" />
+			<zipfileset dir="${data.dir}" prefix="config${module.dir}/${module.id}/bootstrap" />
+			<!--zipfileset dir="${config.dir}${extension.dir}/model" prefix="config${module.dir}/${module.id}/model" /-->
+			<zipfileset file="${config.dir}${extension.dir}/demo-model-context.xml" prefix="config${module.dir}/${module.id}" />
+			<zipfileset file="${config.dir}${extension.dir}/web-client-config-custom.xml" prefix="config${module.dir}/${module.id}/ui" />			
+		</zip>
+	</target>
+	
+	<target name="install-amp" depends="package-amp" description="Uses the Alfresco MMT to install the AMP into ${alfresco.war.path}">
+        <java dir="." fork="true" classname="org.alfresco.repo.module.tool.ModuleManagementTool">
+			<classpath refid="classpath"/>
+            <arg line="install ${package.file.amp} ${alfresco.war.path} -force -verbose"/>
+        </java>
+    </target>
+    
+    <target name="deploy-amp" depends="install-amp" description="Unzips the AMP'd WAR file into ${alfresco.web.dir}">
+   		<unzip src="${alfresco.war.path}" dest="${alfresco.web.dir}" />
+    </target>
+
+	<target name="deploy" depends="package-extension" description="Unzips the ${package.file.zip} into ${alfresco.web.dir}">
+		<unzip src="${package.file.zip}" dest="${alfresco.web.dir}" />
+	</target>
+
+	<target name="zip-project" depends="setup" description="Zips the entire Eclipse project as-is into ${project.file.zip}">
+		<delete file="${project.file.zip}" />
+		<zip destfile="${project.file.zip}">
+			<zipfileset dir="${project.dir}" excludes="build/** bin/**" prefix="client-extensions" />
+		</zip>
+	</target>	
+
+	<target name="compile" description="Compiles src to ${bin.dir}">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${source.dir}/java" destdir="${bin.dir}" source="1.5" target="1.5" debug="on" fork="yes">
+			<classpath refid="classpath"/>
+		</javac>
+		<!-- copy in non-compiled files like props if needed -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${source.dir}/java" excludes="**/*.java"/>
+		</copy>
+	</target>
+	
+	<target name="package-jar" depends="setup, compile"
+		description="Jars up the compiled classes and ${web.dir}/META-INF into ${package.file.jar}">
+			<delete file="${package.file.jar}" />
+			<jar destfile="${package.file.jar}">
+				<fileset dir="${bin.dir}" includes="com/**" />
+				<zipfileset dir="${web.dir}/META-INF" excludes="*.zip" prefix="META-INF" />				
+			</jar>
+		</target>
+</project>

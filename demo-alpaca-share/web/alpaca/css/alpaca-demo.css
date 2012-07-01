@@ -1,0 +1,52 @@
+.alpaca-wrapper {
+    min-width: 1250px;
+}
+
+fieldset.alpaca-fieldset {
+    border-top: 1px solid #AAAAAA;
+    padding: 0.5em;
+}
+
+.alpaca-fieldset-object-picker-toolbar {
+    margin-left: 10px;
+}
+
+.alpaca-fieldset-helper {
+    padding: 0px;
+}
+
+list-table {
+    margin-bottom: 10px;
+}
+
+.block-content {
+	background: none repeat scroll 0 0 #fafafa;
+	border-radius: 3px 3px 3px 3px;
+	position: relative;
+	padding: 10px 10px;
+	border: 1px solid #4b5e6b;
+}
+
+.alpaca-controlfield-picker span.alpaca-view-web-edit-list .alpaca-controlfield-label {
+    display: none;
+}
+
+.cm-categories span.alpaca-view-web-edit-list .alpaca-controlfield-label {
+    display: none;
+}
+
+.p-alternate span.alpaca-view-web-edit-list .alpaca-controlfield-label {
+    display: none;
+}
+
+.cm-categories fieldset {
+    border: none;
+}
+
+.p-alternate fieldset {
+    border: none;
+}
+
+span.alpaca-view-web-edit-list label.alpaca-controlfield-label {
+	width: 150px;
+}

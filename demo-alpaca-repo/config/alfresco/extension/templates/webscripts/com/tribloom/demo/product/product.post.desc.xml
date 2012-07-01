@@ -1,0 +1,9 @@
+<webscript>
+	<shortname>product</shortname>
+	<description>POST endpoint for writing Product JSON</description>
+	<family>Alpaca Demo</family>
+	<url>/product/{storeType}/{storeId}/{nodeId}</url>
+	<format default="json">argument</format>
+	<authentication>user</authentication>
+	<transaction>required</transaction>
+</webscript>

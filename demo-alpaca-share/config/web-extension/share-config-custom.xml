@@ -1,0 +1,35 @@
+<alfresco-config>
+
+	<!-- Repository Library config section -->
+	<config evaluator="string-compare" condition="RepositoryLibrary" replace="true">
+		<!-- Whether the link to the Repository Library appears in the header component or not. -->
+		<visible>true</visible>
+	</config>
+
+	<!-- Document Library Actions config section -->
+	<config evaluator="string-compare" condition="DocLibActions">
+		<!-- Action definitions -->
+		<actions>
+			<!-- Edit properties page -->
+			<action id="document-edit-alpaca" type="pagelink" label="actions.document.edit-alpaca">
+				<param name="page">edit-alpaca?nodeRef={node.nodeRef}</param>
+				<permissions>
+					<permission allow="true">Write</permission>
+				</permissions>
+				<evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+				<evaluator>evaluator.doclib.action.edit-alpaca</evaluator>
+			</action>
+		</actions>
+
+		<!-- Action Group definitions -->
+		<actionGroups>
+			<actionGroup id="document-browse">
+				<action index="100" id="document-edit-alpaca" />
+			</actionGroup>
+			<actionGroup id="document-details">
+				<action index="100" id="document-edit-alpaca" />
+			</actionGroup>
+		</actionGroups>
+	</config>
+
+</alfresco-config>

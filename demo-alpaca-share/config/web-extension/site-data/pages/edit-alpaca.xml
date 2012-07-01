@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <title>Edit JSON with Alpaca</title>
+   <title-id>page.editMetadata.title</title-id>
+   <description>Edit a JSON node with Alpaca forms</description>
+   <description-id>page.editMetadata.description</description-id>
+   <template-instance>edit-alpaca</template-instance>
+   <authentication>user</authentication>
+</page>
