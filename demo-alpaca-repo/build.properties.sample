@@ -2,6 +2,6 @@ alfresco.version=4.0.2
 alfresco.sdk.dir=/Users/cpaul/dev/alfresco/${alfresco.version}/sdk/lib
 alfresco.sdk.remote.dir=${alfresco.sdk.dir}/remote
 alfresco.sdk.server.dir=${alfresco.sdk.dir}/server
-tomcat.webapps.dir=${root.dir}/../../../tomcat/webapps
+tomcat.webapps.dir=${root.dir}/../../../../tomcat/webapps
 alfresco.web.dir=${tomcat.webapps.dir}/alfresco
 alfresco.war.path=${tomcat.webapps.dir}/alfresco.war
