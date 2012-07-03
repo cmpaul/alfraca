@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Alpaca Node</shortname>
-    <description>Test webscript that returns node json</description>
-    <url>/test/alpaca-node</url>
-    <format default="json">extension</format>
-</webscript>

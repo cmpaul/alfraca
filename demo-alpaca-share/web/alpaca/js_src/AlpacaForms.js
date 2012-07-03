@@ -77,43 +77,6 @@
     		}
     	}
     };
-
-    Alpaca.Forms.Utils.Schema = {
-        /**
-         * Used to validate Qti modal feedbacks.
-         *
-         * @param message
-         */
-        validateQtiModalFeedbacks: function(control, callback ,options) {
-            var controlVal = control.getValue();
-            var hasOptions = {};
-            $.each(options, function(i,v) {
-                hasOptions[v] = false;
-            });
-
-            var hasDuplicateOption = false;
-            $.each(controlVal, function(i, v) {
-                if (hasOptions[v["@identifier"]]) {
-                    hasDuplicateOption = true;
-                    return false;
-                } else {
-                    hasOptions[v["@identifier"]] = true;
-                }
-            });
-
-            if (hasDuplicateOption) {
-                callback({
-                    "message": "Feedback type must be unique.",
-                    "status": false
-                });
-            } else {
-                callback({
-                    "message": "Valid value (custom validator)",
-                    "status": true
-                });
-            }
-        }
-    };
     
     Alpaca.Forms.Product = {
     	initialize: function(nodeRef) {
