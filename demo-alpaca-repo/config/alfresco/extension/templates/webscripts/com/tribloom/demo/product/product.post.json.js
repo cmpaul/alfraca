@@ -1,22 +1,25 @@
+<import resource="classpath:alfresco/templates/webscripts/org/alfresco/repository/requestutils.lib.js">
+
 function main() {
-	model.success = false;
-	
-	var nodeRef = url.templateArgs['storeType'] + "://" 
-				+ url.templateArgs['storeId'] + "/" 
-				+ url.templateArgs['nodeId'];
-	
-	var scriptNode = search.findNode(nodeRef);
-	
+	var scriptNode = getRequestNode();
 	if (scriptNode == null) {
-		status.code = 500;
-		status.message = "Unable to find node for nodeRef " + nodeRef;
+		status.setCode(
+			status.STATUS_NOT_FOUND,
+			"Unable to find node"
+		);
 		return;
 	}
-	
+	if (!scriptNode.hasPermission("Write")) {
+		status.setCode(
+			status.STATUS_UNAUTHORIZED,
+			"Unauthorized to modify this product"
+		);
+	}
 	scriptNode.content = json;
-	
-	model.success = true;
-	model.nodeRef = nodeRef;
+	status.setCode(
+		status.STATUS_ACCEPTED,
+		"Product updated"
+	);
 }
 
 main();
